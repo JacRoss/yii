@@ -15,7 +15,6 @@ use yii\web\UnauthorizedHttpException;
 /**
  * Class AdminFilter
  * @package app\filters
- * @property
  */
 class AdminFilter extends ActionFilter
 {
