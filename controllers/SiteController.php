@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\filters\AdminFilter;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -28,6 +29,9 @@ class SiteController extends Controller
                         'roles' => ['@'],
                     ],
                 ],
+            ], [
+                'class' => AdminFilter::className(),
+                'only' => ['index']
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
