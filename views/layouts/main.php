@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
 use yii\helpers\Html;
@@ -41,7 +42,7 @@ AppAsset::register($this);
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+            ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post')
@@ -55,7 +56,20 @@ AppAsset::register($this);
         ],
     ]);
     NavBar::end();
+
+    $options = [
+        'appName' => Yii::$app->name,
+        'url' => Yii::$app->params['url'] ?? 'localhost',
+    ];
+
+    $this->registerJs(
+        "var yiiOptions = " . \yii\helpers\Json::htmlEncode($options) . ";",
+        \yii\web\View::POS_HEAD,
+        'yiiOptions'
+    );
+
     ?>
+
 
     <div class="container">
         <?= Breadcrumbs::widget([
@@ -67,9 +81,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-left"><?= date('d-m-Y') ?></p>
     </div>
 </footer>
 
