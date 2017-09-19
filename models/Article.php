@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use Yii;
+use app\components\SoftDeletes\TSoftDeletes;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -14,11 +14,15 @@ use yii\behaviors\TimestampBehavior;
  * @property string $body
  * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $category_id
+ * @property integer $deleted_at
  *
+ * @property Category $category
  * @property User $user
  */
 class Article extends \yii\db\ActiveRecord
 {
+    use TSoftDeletes;
 
     public function behaviors()
     {
@@ -41,10 +45,11 @@ class Article extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'created_at', 'updated_at'], 'integer'],
+            [['user_id', 'created_at', 'updated_at', 'category_id', 'deleted_at'], 'integer'],
             [['body'], 'string'],
             [['created_at', 'updated_at'], 'required'],
             [['title'], 'string', 'max' => 255],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -61,7 +66,17 @@ class Article extends \yii\db\ActiveRecord
             'body' => 'Body',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'category_id' => 'Category ID',
+            'deleted_at' => 'Deleted At',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategory()
+    {
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 
     /**
@@ -71,4 +86,10 @@ class Article extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    public function getCreatedDayOfWeek(): string
+    {
+        return date('l', $this->created_at);
+    }
+
 }

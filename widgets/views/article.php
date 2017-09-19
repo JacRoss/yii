@@ -8,7 +8,7 @@ use yii\helpers\Html;
 ?>
 
 <div class="panel panel-default">
-    <div class="panel-heading"><?= Html::encode($article->title) ?></div>
+    <div class="panel-heading"><?= Html::encode($article->title) ?> <?= $article->updated_at > $article->created_at ? '(Обновлено)' : '' ?> </div>
     <div class="panel-body">
         <?= $article->body ?>
     </div>
