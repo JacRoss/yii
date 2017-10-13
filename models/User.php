@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "users".
@@ -19,17 +18,10 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $updated_at
  *
  * @property Article[] $articles
+ * @property UserRole[] $userRoles
  */
 class User extends \yii\db\ActiveRecord
 {
-
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
-    }
-
     /**
      * @inheritdoc
      */
@@ -78,5 +70,13 @@ class User extends \yii\db\ActiveRecord
     public function getArticles()
     {
         return $this->hasMany(Article::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUserRoles()
+    {
+        return $this->hasMany(UserRole::className(), ['user_id' => 'id']);
     }
 }
